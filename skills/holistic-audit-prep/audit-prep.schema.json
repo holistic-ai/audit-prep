@@ -4,11 +4,131 @@
   "properties": {
     "packVersion": {
       "type": "number",
-      "const": 1
+      "const": 3
     },
     "answers": {
       "type": "object",
       "properties": {
+        "testing_method": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": ["hiring_data", "api", "client_scores"],
+                  "description": "\"hiring_data\" = Use your hiring data; \"api\" = Holistic AI sends test data to your API; \"client_scores\" = You score Holistic AI's test data"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "How will we test your system? This decides what you upload and the steps of the audit. You can change it until you submit. A business or legal answer: a person always decides it. Fill it only if a file states it."
+        },
+        "real_candidate_data": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": ["yes", "no"],
+                  "description": "\"yes\" = Yes, real candidates or employees; \"no\" = No, test data we made"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Do these records come from real candidates or employees? NYC Local Law 144 asks for historical data: records of real candidates or employees that your system scored. Test data you made yourself is allowed only when there is not enough historical data, and the Data section then asks why. A business or legal answer: a person always decides it. Fill it only if a file states it."
+        },
+        "california_scoring": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": ["api", "client_scores"],
+                  "description": "\"api\" = Holistic AI sends test data to your API; \"client_scores\" = You score Holistic AI's test data"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "How will we score the California test data? California always uses test data that Holistic AI generates. A business or legal answer: a person always decides it. Fill it only if a file states it."
+        },
         "system_name": {
           "type": "object",
           "properties": {
@@ -46,7 +166,7 @@
           },
           "required": ["value", "evidence", "confidence", "needsPerson"],
           "additionalProperties": false,
-          "description": "System name Enter the AEDT system name A repo can draft this answer."
+          "description": "System name The name of the system A repo can draft this answer."
         },
         "date_of_deployment": {
           "type": "object",
@@ -86,106 +206,7 @@
           },
           "required": ["value", "evidence", "confidence", "needsPerson"],
           "additionalProperties": false,
-          "description": "Date of deployment The date the AEDT was deployed A business or legal answer: a person always decides it. Fill it only if a file states it."
-        },
-        "system_long_description": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "minLength": 1
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The proposed answer. null when the repo does not answer it."
-            },
-            "evidence": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/PrepEvidence"
-              },
-              "description": "Every file read for this answer. Required when value is not null."
-            },
-            "confidence": {
-              "type": "string",
-              "enum": ["high", "medium", "low"]
-            },
-            "needsPerson": {
-              "type": "boolean",
-              "description": "true when a person must give or check this answer"
-            },
-            "note": {
-              "description": "What a person should check, or why the repo does not answer it",
-              "type": "string"
-            }
-          },
-          "required": ["value", "evidence", "confidence", "needsPerson"],
-          "additionalProperties": false,
-          "description": "System detailed description Provide a detailed description of the AEDT system. Leave this empty if section 3 of the supporting document is complete. The description then comes from the document. A repo can draft this answer."
-        },
-        "scores": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "minLength": 1,
-                        "description": "Score name"
-                      },
-                      "column": {
-                        "type": "string",
-                        "minLength": 1,
-                        "description": "Dataset column"
-                      },
-                      "description": {
-                        "type": "string",
-                        "minLength": 1,
-                        "description": "Description"
-                      }
-                    },
-                    "required": ["name", "column", "description"],
-                    "additionalProperties": false
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The proposed answer. null when the repo does not answer it."
-            },
-            "evidence": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/PrepEvidence"
-              },
-              "description": "Every file read for this answer. Required when value is not null."
-            },
-            "confidence": {
-              "type": "string",
-              "enum": ["high", "medium", "low"]
-            },
-            "needsPerson": {
-              "type": "boolean",
-              "description": "true when a person must give or check this answer"
-            },
-            "note": {
-              "description": "What a person should check, or why the repo does not answer it",
-              "type": "string"
-            }
-          },
-          "required": ["value", "evidence", "confidence", "needsPerson"],
-          "additionalProperties": false,
-          "description": "Scores audited Add one row for each score that the system gives a candidate and that this audit tests. Give the name of the score, the column in the dataset that holds it, and a short description of its scale, its direction and how it is used. Leave this empty if section 5 of the supporting document is complete. The scores then come from the document. A repo can draft this answer."
+          "description": "Date of deployment The date the system was deployed A business or legal answer: a person always decides it. Fill it only if a file states it."
         },
         "company_description": {
           "type": "object",
@@ -224,7 +245,397 @@
           },
           "required": ["value", "evidence", "confidence", "needsPerson"],
           "additionalProperties": false,
-          "description": "Company description Appears in the audit report. Leave this empty to use section 2 of the supporting document, or the organisation description in Settings. A business or legal answer: a person always decides it. Fill it only if a file states it."
+          "description": "Company description Appears in the audit report. A repo can draft this answer."
+        },
+        "system_overview": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Overview and purpose What the system does, the employment context and stage where it is used, and what it does not do. A repo can draft this answer."
+        },
+        "system_users": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Intended users and population Who uses the system, the candidate or employee population, the job families, the geographies and the employment stage. A repo can draft this answer."
+        },
+        "system_output": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Output and use case The output type, its scale and direction, what each customer can configure, and how people use the output to make a decision. A repo can draft this answer."
+        },
+        "system_criterion_selection": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Competency or criterion selection How the makers decided what the system measures or predicts. For a system that is not an assessment, how they chose the prediction target. A repo can draft this answer."
+        },
+        "system_pilot_data": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Pilot data Assessments only: how the item pool was built and refined. Leave it empty for another system. A repo can draft this answer."
+        },
+        "system_validation": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Psychometric properties and validation evidence How items or features were chosen, and the statistical evidence for them. A repo can draft this answer."
+        },
+        "system_training_data": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Training data collection The data that trains the model, and the source of the outcome label. A repo can draft this answer."
+        },
+        "system_preprocessing": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Data pre-processing Missing data, validation rules, transformations, response quality, duplicates, outliers and any other cleaning. A repo can draft this answer."
+        },
+        "system_algorithm": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Algorithm and model building The algorithm, the objective, the score transformation, the calibration and how the model is interpreted. A repo can draft this answer."
+        },
+        "system_protected_class_analysis": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Protected class analysis Any fairness testing the makers do themselves, and what they do when it finds a problem. A repo can draft this answer."
         },
         "key_information": {
           "type": "object",
@@ -263,7 +674,74 @@
           },
           "required": ["value", "evidence", "confidence", "needsPerson"],
           "additionalProperties": false,
-          "description": "Key information The variables the system uses to produce an outcome, and whether any protected characteristic is an input. Leave this empty to use section 4 of the supporting document. A repo can draft this answer."
+          "description": "Key information The inputs the system uses to produce an outcome, and whether a protected characteristic is one of them. For example: resume text and job title. No protected characteristic is an input. A repo can draft this answer."
+        },
+        "scores": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Score name"
+                      },
+                      "column": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Dataset column"
+                      },
+                      "range": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Range"
+                      },
+                      "description": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Description"
+                      }
+                    },
+                    "required": ["name", "column", "range", "description"],
+                    "additionalProperties": false
+                  },
+                  "description": "One object for each row"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Scores audited Add one row for each score that the system gives a candidate and that this audit tests. Give the name of the score, the column in the dataset that holds it, its range (\"0 to 100\", or \"0 or 1\" for a yes or no outcome), and a short description of its scale, its direction and how it is used. A repo can draft this answer."
         },
         "client_system_qualifies": {
           "type": "object",
@@ -449,165 +927,6 @@
           "additionalProperties": false,
           "description": "Which decisions is your system used for? Select all that apply. A business or legal answer: a person always decides it. Fill it only if a file states it."
         },
-        "data_type": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "enum": ["historical", "test"],
-                  "description": "\"historical\" = Historical; \"test\" = Test"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The proposed answer. null when the repo does not answer it."
-            },
-            "evidence": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/PrepEvidence"
-              },
-              "description": "Every file read for this answer. Required when value is not null."
-            },
-            "confidence": {
-              "type": "string",
-              "enum": ["high", "medium", "low"]
-            },
-            "needsPerson": {
-              "type": "boolean",
-              "description": "true when a person must give or check this answer"
-            },
-            "note": {
-              "description": "What a person should check, or why the repo does not answer it",
-              "type": "string"
-            }
-          },
-          "required": ["value", "evidence", "confidence", "needsPerson"],
-          "additionalProperties": false,
-          "description": "Data type Select historical data if the AEDT has assessed enough candidates or employees for a statistically significant audit. Select test data only if it has not. A business or legal answer: a person always decides it. Fill it only if a file states it."
-        },
-        "holistic_ai_generates_test_data": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "enum": ["yes", "no"],
-                  "description": "\"yes\" = Yes; \"no\" = No"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The proposed answer. null when the repo does not answer it."
-            },
-            "evidence": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/PrepEvidence"
-              },
-              "description": "Every file read for this answer. Required when value is not null."
-            },
-            "confidence": {
-              "type": "string",
-              "enum": ["high", "medium", "low"]
-            },
-            "needsPerson": {
-              "type": "boolean",
-              "description": "true when a person must give or check this answer"
-            },
-            "note": {
-              "description": "What a person should check, or why the repo does not answer it",
-              "type": "string"
-            }
-          },
-          "required": ["value", "evidence", "confidence", "needsPerson"],
-          "additionalProperties": false,
-          "description": "Will Holistic AI generate the test data? Select Yes if Holistic AI creates the synthetic test data for this audit. A business or legal answer: a person always decides it. Fill it only if a file states it."
-        },
-        "has_api_connection": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "enum": ["yes", "no"],
-                  "description": "\"yes\" = Yes; \"no\" = No"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The proposed answer. null when the repo does not answer it."
-            },
-            "evidence": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/PrepEvidence"
-              },
-              "description": "Every file read for this answer. Required when value is not null."
-            },
-            "confidence": {
-              "type": "string",
-              "enum": ["high", "medium", "low"]
-            },
-            "needsPerson": {
-              "type": "boolean",
-              "description": "true when a person must give or check this answer"
-            },
-            "note": {
-              "description": "What a person should check, or why the repo does not answer it",
-              "type": "string"
-            }
-          },
-          "required": ["value", "evidence", "confidence", "needsPerson"],
-          "additionalProperties": false,
-          "description": "Do you have an API connection for testing the system? Select Yes if Holistic AI can send test candidates to the system through an API and read the scores back. A business or legal answer: a person always decides it. Fill it only if a file states it."
-        },
-        "generated_scoring_without_api": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "minLength": 1
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The proposed answer. null when the repo does not answer it."
-            },
-            "evidence": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/PrepEvidence"
-              },
-              "description": "Every file read for this answer. Required when value is not null."
-            },
-            "confidence": {
-              "type": "string",
-              "enum": ["high", "medium", "low"]
-            },
-            "needsPerson": {
-              "type": "boolean",
-              "description": "true when a person must give or check this answer"
-            },
-            "note": {
-              "description": "What a person should check, or why the repo does not answer it",
-              "type": "string"
-            }
-          },
-          "required": ["value", "evidence", "confidence", "needsPerson"],
-          "additionalProperties": false,
-          "description": "How will the generated test data be scored without an API connection? Describe how the test data that Holistic AI generates can be scored in bulk, and how the outputs come back to Holistic AI. For example: Holistic AI uploads a CSV of generated candidate data to your platform with login details that you provide, and you return the CSV with a new column that holds the fit_score. Include as much detail as you can about the process, and the expected time to return the outputs to Holistic AI. If accounts must be created for Holistic AI to log in, or a staging environment must be set up, give details and time estimates for that too. A business or legal answer: a person always decides it. Fill it only if a file states it."
-        },
         "historical_data_not_used_reason": {
           "type": "object",
           "properties": {
@@ -645,7 +964,7 @@
           },
           "required": ["value", "evidence", "confidence", "needsPerson"],
           "additionalProperties": false,
-          "description": "Why is historical data not used? NYC Local Law 144 allows test data only if there is not enough historical data for a statistically significant audit. Explain why, for example the AEDT is not in use yet, or it has assessed too few candidates. The summary of results states this reason. A business or legal answer: a person always decides it. Fill it only if a file states it."
+          "description": "Why is historical data not used? NYC Local Law 144 allows test data only if there is not enough historical data for a statistically significant audit. Explain why, for example the system is not in use yet, or it has assessed too few candidates. The summary of results states this reason. A business or legal answer: a person always decides it. Fill it only if a file states it."
         },
         "data_provided_description": {
           "type": "object",
@@ -684,7 +1003,7 @@
           },
           "required": ["value", "evidence", "confidence", "needsPerson"],
           "additionalProperties": false,
-          "description": "Data provided description Provide a detailed description of the data provided, including job description and resume content details A repo can draft this answer."
+          "description": "Data provided description Which applications or employees the file covers, the roles, and how the score was produced. A repo can draft this answer."
         },
         "data_period_start": {
           "type": "object",
@@ -884,150 +1203,625 @@
           "required": ["value", "evidence", "confidence", "needsPerson"],
           "additionalProperties": false,
           "description": "Data region Where the candidates or employees in the dataset are located, for example New York City or United States A business or legal answer: a person always decides it. Fill it only if a file states it."
+        },
+        "api_base_url": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Base URL The address of the API in production. A repo can draft this answer."
+        },
+        "api_sandbox_url": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Sandbox or staging URL Only if a separate test environment exists. A repo can draft this answer."
+        },
+        "api_auth_method": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "api_key_header",
+                    "bearer_token",
+                    "username_password",
+                    "oauth_client_credentials",
+                    "none"
+                  ],
+                  "description": "\"api_key_header\" = An API key in a header; \"bearer_token\" = A bearer token; \"username_password\" = Username and password; \"oauth_client_credentials\" = OAuth client ID and secret; \"none\" = No sign-in"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "How does your API check who is calling? A repo can draft this answer."
+        },
+        "api_auth_header": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Header name The header that carries the key, for example X-Api-Key. A repo can draft this answer."
+        },
+        "api_auth_prefix": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Text before the key Only if your API wants text in the header before the key, for example \"Token \" in \"Authorization: Token <key>\". Leave it empty when the header holds the key alone. A repo can draft this answer."
+        },
+        "api_auth_scope": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Scope Only if your token service wants a scope in the token request. Separate several with spaces. A repo can draft this answer."
+        },
+        "api_headers": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Header"
+                      },
+                      "value": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Value"
+                      }
+                    },
+                    "required": ["name", "value"],
+                    "additionalProperties": false
+                  },
+                  "description": "One object for each row"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Other headers on every request Headers other than the sign-in, never a key. A repo can draft this answer."
+        },
+        "api_steps": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "purpose": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "What it does"
+                      },
+                      "method": {
+                        "type": "string",
+                        "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+                        "description": "Method"
+                      },
+                      "path": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Path"
+                      },
+                      "result": {
+                        "type": "string",
+                        "enum": ["sync", "polling", "callback"],
+                        "description": "How the result comes back"
+                      },
+                      "request": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Example request (JSON): the JSON as text, with placeholders for any credential"
+                      },
+                      "response": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Example response (JSON): the JSON as text, with placeholders for any credential"
+                      }
+                    },
+                    "required": [
+                      "purpose",
+                      "method",
+                      "path",
+                      "result",
+                      "request",
+                      "response"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "description": "One object for each row"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "How do we call your API, step by step? One step for each call, in the order we make them, with an example request and response. A repo can draft this answer."
+        },
+        "api_score_field": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Which response field is the score? Name the field and its step, because Scores audited already gives its scale and meaning. A repo can draft this answer."
+        },
+        "api_rate_limits": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Rate limits Any limits per key or per endpoint, quotas or caps on calls at the same time. A repo can draft this answer."
+        },
+        "api_determinism": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Determinism Whether the same input always gives the same output, and any pinned model version, seed or temperature. A repo can draft this answer."
+        },
+        "api_guardrails": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Guardrails Any filtering or blocking of inputs or outputs. A repo can draft this answer."
+        },
+        "api_errors": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Errors The status codes and the format of an error response. A repo can draft this answer."
+        },
+        "api_test_data": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The proposed answer. null when the repo does not answer it."
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PrepEvidence"
+              },
+              "description": "Every file read for this answer. Required when value is not null."
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "needsPerson": {
+              "type": "boolean",
+              "description": "true when a person must give or check this answer"
+            },
+            "note": {
+              "description": "What a person should check, or why the repo does not answer it",
+              "type": "string"
+            }
+          },
+          "required": ["value", "evidence", "confidence", "needsPerson"],
+          "additionalProperties": false,
+          "description": "Test data A sample of real inputs and the outputs they gave, or a description of the usual input. A repo can draft this answer."
         }
       },
       "additionalProperties": false
-    },
-    "api": {
-      "anyOf": [
-        {
-          "type": "object",
-          "properties": {
-            "baseUrlProposal": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "url": {
-                      "type": "string",
-                      "pattern": "^https?:\\/\\/[^?#\\s]+$"
-                    },
-                    "environment": {
-                      "type": "string",
-                      "enum": [
-                        "production",
-                        "staging",
-                        "development",
-                        "unknown"
-                      ]
-                    },
-                    "evidence": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/$defs/PrepEvidence"
-                      }
-                    }
-                  },
-                  "required": ["url", "environment", "evidence"],
-                  "additionalProperties": false
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The address Holistic AI could call. A proposal only: Holistic AI confirms it."
-            },
-            "endpoints": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "method": {
-                    "type": "string",
-                    "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"]
-                  },
-                  "path": {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "^[^?#]*$"
-                  },
-                  "purpose": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "evidence": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/$defs/PrepEvidence"
-                    }
-                  }
-                },
-                "required": ["method", "path", "purpose", "evidence"],
-                "additionalProperties": false
-              }
-            },
-            "auth": {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "type": "string",
-                  "enum": [
-                    "none",
-                    "header",
-                    "query",
-                    "oauth2_client_credentials",
-                    "other"
-                  ]
-                },
-                "parameterName": {
-                  "description": "The header or query parameter that carries the credential, for example \"X-API-Key\"",
-                  "type": "string"
-                },
-                "prefix": {
-                  "default": "",
-                  "description": "For a header: the text before the credential, with its space, for example \"Token \" or \"Bearer \". Empty when there is none",
-                  "type": "string"
-                },
-                "credentialNames": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "The NAMES of the credentials the client must enter, in capital letters, for example \"SCORING_API_KEY\". Never a value."
-                },
-                "evidence": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/$defs/PrepEvidence"
-                  }
-                }
-              },
-              "required": ["kind", "credentialNames", "evidence"],
-              "additionalProperties": false
-            },
-            "rateLimits": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Request limits, retries and async or polling behaviour, as the code or docs state them"
-            },
-            "hosts": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Every other host the API flow calls, such as a sign-in host"
-            }
-          },
-          "required": [
-            "baseUrlProposal",
-            "endpoints",
-            "auth",
-            "rateLimits",
-            "hosts"
-          ],
-          "additionalProperties": false
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "description": "The API of the one system this pack describes. null when that system has no API"
     },
     "apiDocumentationFile": {
       "anyOf": [
@@ -1036,8 +1830,8 @@
           "properties": {
             "path": {
               "type": "string",
-              "minLength": 1,
-              "description": "The API documentation file the agent wrote, relative to the pack"
+              "pattern": "^api-documentation\\.(md|json|yaml|yml|txt)$",
+              "description": "The API documentation file the agent wrote next to audit-prep.json: api-documentation.md, or the copied OpenAPI file as api-documentation.json, .yaml, .yml or .txt"
             },
             "sources": {
               "type": "array",
@@ -1062,13 +1856,7 @@
       "description": "Things a person must know, such as a file with personal data that the pack leaves out"
     }
   },
-  "required": [
-    "packVersion",
-    "answers",
-    "api",
-    "apiDocumentationFile",
-    "warnings"
-  ],
+  "required": ["packVersion", "answers", "apiDocumentationFile", "warnings"],
   "additionalProperties": false,
   "$defs": {
     "PrepEvidence": {

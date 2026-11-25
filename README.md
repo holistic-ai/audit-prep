@@ -16,7 +16,7 @@ Ask your agent:
 
 > Follow the holistic-audit-prep skill to write the Holistic AI audit preparation pack for this repo.
 
-The agent never copies credential values, personal data or team names into the pack. Upload `audit-prep/audit-prep.json` and the API documentation file it names on the intake page of your audit.
+The agent never copies credential values, personal data or team names into the pack. Open your audit in the Holistic AI client app, choose "Let a coding agent draft it" on the intake, and drop the whole `audit-prep` folder there. You then tick the answers you want before anything is saved.
 
 ## Terms
 
